@@ -39,4 +39,5 @@ for i = 1 : size(testdata, 2)
     end
 end
 
-TestAccuracy=1-MissClassificationRate_Training/size(testdata,2)
+TestAccuracy=1-MissClassificationRate_Training/size(testdata,2);
+

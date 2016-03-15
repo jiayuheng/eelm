@@ -1,4 +1,4 @@
-function [TestAccuracy,label_index_model]=eelmtest(testdata,testlabel,numhiddern,numofclass,paraiw,parabh,paraow,N)
+function [TestAccuracy]=eelmtest(testdata,testlabel,numhiddern,numofclass,paraiw,parabh,paraow,N)
 NumberofOutputNeurons=numofclass;
 NumberofTestingData=length(testlabel);
 NumberofInputNeurons= size(testdata,1);
@@ -43,13 +43,11 @@ for i = 1 : size(testdata, 2)
     end
 end
 %% output every weak classifier
-label_index_model=zeros(N,NumberofTestingData);
-for i=1:N
-    [x, label_index_model(i,:)]=max(abs(eelmy(:,:,i)));
+for i=1:1
+    [x, label_index_actual]=max(abs(Y(:,i)));
 end
-% label
 %%
-TestAccuracy=1-MissClassificationRate_Training/size(testdata,2);
+TestAccuracy=1-MissClassificationRate_Training/size(testdata,2)
 
 
 
