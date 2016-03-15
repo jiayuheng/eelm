@@ -12,6 +12,10 @@ trainlabel=train_data(:,1)'; %1 * num of samples
 test_data=load('diabetes_test');
 testdata=test_data(:,2:size(test_data,2))';
 testlabel=test_data(:,1)';
+%% para data 
+%step 1 separate label and data
+%step 2 nomize data
+%step 3 nomize label
 %% parameter setting
 numhiddern=50;
 numofclass=2;
@@ -21,14 +25,14 @@ if (Single ==1)
 %     numhiddern=20;
 %     numofclass=2;
     [InputWeight,BiasofHiddenNeurons,OutputWeight]=elmtrain(traindata,trainlabel,numhiddern,numofclass);
-    [accuracy]=elmtest(testdata,testlabel,numhiddern,numofclass,InputWeight,BiasofHiddenNeurons,OutputWeight);
+    [accuracy]=elmtest(traindata,trainlabel,numhiddern,numofclass,InputWeight,BiasofHiddenNeurons,OutputWeight);
     disp(['The testaccuracy of single elm is : ',num2str(accuracy)])
 end
 
 
 %% eelm train
 %boostrip or not
-N=10;
+N=50;
 paraiw=[];
 parabh=[];
 paraow=[];
@@ -45,9 +49,9 @@ for i=1:N
 end
 
 %% test eelm alogorithm 
-[eelmaccuracy,out]=eelmtest(testdata,testlabel,numhiddern,numofclass,paraiw,parabh,paraow,N);
-disp(['The testaccuracy of eelm is : ',num2str(eelmaccuracy),' and the num of weak classifier is'])
-
+[eelmaccuracy,out]=eelmtest(traindata,trainlabel,numhiddern,numofclass,paraiw,parabh,paraow,N);
+disp(['The trainaccuracy of eelm is : ',num2str(eelmaccuracy)])
+disp(['And the num of weak classifier is : ',num2str(N)])
 %% just select some of the classifiers based on diversity and see the result
 %% select diversity elm and test the result by eelmtest
     % but how to select is a big issue, my method is based on diversity
@@ -55,9 +59,22 @@ disp(['The testaccuracy of eelm is : ',num2str(eelmaccuracy),' and the num of we
     % another advantage is time saving than the ensenable elm method
     
     % baesd on output is a very direct method, but it cost lot of time.
-% for 
-    
-    
+% Theta=lasso_train(Phi,Y,lambda)
+lambda=1;
+Phi=out;
+label=trainlabel;
+[seelmaccuracy,Theta]=seelm(Phi,label,lambda); 
+disp(['The trainaccuracy of seelm is : ',num2str(seelmaccuracy)])
+
+[eelmaccuracy,testout]=eelmtest(testdata,testlabel,numhiddern,numofclass,paraiw,parabh,paraow,N);
+disp(['The testaccuracy of eelm is : ',num2str(eelmaccuracy)])
+Phi=testout;
+label=testlabel;
+[seelmaccuracy]=seelmtest(Phi,label,Theta); 
+disp(['The testaccuracy of seelm is : ',num2str(seelmaccuracy)])
+
+
+
     
     
     
